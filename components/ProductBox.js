@@ -1,3 +1,4 @@
+import Link from "next/link";
 import styled from "styled-components";
 const WhiteBox = styled.div`
   background-color: white;
@@ -20,14 +21,9 @@ const DetailContainer = styled.div`
   align-items: center;
 `;
 
-const QuickBuyButton = styled.div`
-  background-color: #003942;
-  color: white;
-  text-transform: uppercase;
-  max-width: 8rem;
-  padding: 0.5em 1em;
-  text-align: center;
-  margin-top: 1em;
+const ProductBoxLink = styled(Link)`
+  text-decoration: none;
+  color: black;
 `;
 
 export default function ProductBox({
@@ -40,16 +36,15 @@ export default function ProductBox({
   categories,
 }) {
   return (
-    <div>
+    <ProductBoxLink href={`/product/${_id}`}>
       <WhiteBox>
         <img src={images[0]} alt={title} />
       </WhiteBox>
       <DetailContainer>
-        <h2>{title}</h2>
-        <div>From INR {price}</div>
+        <h3>{title}</h3>
+        <div>from INR {price}</div>
         <div>Save upto </div>
-        <QuickBuyButton>Quick Buy</QuickBuyButton>
       </DetailContainer>
-    </div>
+    </ProductBoxLink>
   );
 }
