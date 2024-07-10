@@ -2,6 +2,7 @@ import Page from "../../components/Page";
 import { mongooseConnect } from "../../lib/mongoose";
 import { Category } from "../../models/category";
 import { Product } from "../../models/Product";
+
 import "./globals.css";
 async function getFeaturedProduct(featuredProductId) {
   await mongooseConnect();

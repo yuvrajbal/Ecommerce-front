@@ -10,16 +10,26 @@ const Bg = styled.div`
 `;
 const StyledImage = styled.img`
   max-width: 100%;
+  // margin: 0 auto;
+  min-height: 300px;
+  object-fit:cover;
+  object-position: center;
+//   @media (max-width: 768px) {
+//   object-position: center;
+// }
+//   @media (max-width: 468px) {
+//   object-position: center;
+// }
+
 `;
 
 const FeaturedLink = styled(Link)`
-  
 `;
 
 const CategoryButtonContainer = styled.div`
   display: grid;
   grid-template-columns: repeat(2,1fr);
-  max-width: 70%;
+  max-width: 80%;
   gap: 1em;
   margin:0 auto;
   margin-top: 1.5em;
@@ -27,22 +37,23 @@ const CategoryButtonContainer = styled.div`
  
   @media (min-width: 600px) {
     grid-template-columns: repeat(3,1fr);
-    max-width: 60%;
+    // max-width: 60%;
     margin-top: 1.8em;
   }
   @media (min-width: 1200px) {
     grid-template-columns: repeat(6,1fr);
-    max-width: 80%;
+    max-width: 75%;
     margin-top: 2.8em;
 
   }
 
 `;
 
-const CategoryButton = styled(Link)`
+const 
+CategoryButton = styled(Link)`
   background-color: #003942;
   color:#EBE4D4;
-  font-size: 1rem;
+  font-size: 0.9rem;
   font-weight: 600;
   letter-spacing: 0.1rem;
   border-radius: 0.3rem;
@@ -52,34 +63,36 @@ const CategoryButton = styled(Link)`
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 1em 0;
-  height: 1.8rem; 
+  padding: 2em 1em;
   margin-bottom: 1.2em;
 
   @media (min-width: 768px) {
     font-size: 1.2rem;
-    padding: 1.2em 1.2em;
-    height: 2.2rem; 
     border-radius: 0.5rem;
   }
   @media (min-width: 1124px) {
-    padding: 1.8em 0;
-    font-size: 1.8rem;
+
     border-radius: 0.8rem;
-    max-height: 1rem;
+    
     
   }
 
 `;
 
+const FeaturedContainer = styled.div`
+  display: flex;
+  justify-content: center;
+`;
+
 export default function Featured() {  
   return (
     <Bg>
-      <Center>
+        <FeaturedContainer>
         <FeaturedLink href={'/featured'}>
           <StyledImage src="/Julysale.jpeg" alt="logo" />
         </FeaturedLink>
-
+        </FeaturedContainer>
+        <Center>
         <CategoryButtonContainer>
           <CategoryButton href={'/nutrition/protein'}> Protein</CategoryButton>
           <CategoryButton href={'/nutrition/power&strength'}> Strength</CategoryButton>

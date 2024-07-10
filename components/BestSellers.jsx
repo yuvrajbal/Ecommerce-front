@@ -2,10 +2,12 @@ import styled from "styled-components";
 import Center from "./Center";
 import ProductBox from "./ProductBox";
 import Link from "next/link";
+import { useContext } from "react";
+import { CartContext } from "./CartContext";
 
 const ProductsGrid = styled.div`
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr 1fr;
+  grid-template-columns: 1fr 1fr 1fr 1fr 1fr ;
   gap: 0em;
   padding: 1em 2em;
 
@@ -57,23 +59,29 @@ const ViewAll = styled(Link)`
 `;
 
 export default function BestSellers({ products }) {
-  console.log(products);
+  // console.log(products);
   const sortedProducts = products.sort((a,b) => {
     const rankA = parseInt(a.properties.rank,10);
     const rankB = parseInt(b.properties.rank,10);
     return rankA - rankB;
   })
-  const top4Products = sortedProducts.slice(0,4);
+  const topProducts = sortedProducts.slice(0,5);
+  
+  const { addProduct } = useContext(CartContext);
+
+  function addFeaturedtoCart(prodId){
+    addProduct(prodId); 
+  }
   return (
     <Center>
       
       <SectionHeading>Best Sellers</SectionHeading>
       <ProductsGrid>
 
-        {top4Products.map((product) => (
+        {topProducts.map((product) => (
           <ProductContainer key={product._id}>
           <ProductBox {...product} />
-         <QuickBuyButton>Quick Buy</QuickBuyButton> 
+         <QuickBuyButton onClick={() => addFeaturedtoCart(product._id)}>Quick Buy</QuickBuyButton> 
           </ProductContainer>
         ))}
       

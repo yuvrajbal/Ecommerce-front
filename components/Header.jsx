@@ -2,10 +2,12 @@
 import Link from 'next/link';
 import styled from 'styled-components';
 import Center from './Center';
+import { useContext, useEffect,useState } from "react";
+import { CartContext } from "./CartContext";
+
 
 const StyledHeader = styled.header`
   background-color: #222;
-
 `;
 
 const Logo = styled(Link)`
@@ -21,7 +23,7 @@ const LogoImage = styled.img`
 const Wrapper = styled.div`
   display:flex;
   justify-content:space-between; 
-  padding: 1em 10px; 
+  padding: 1em 2em; 
   
 `;
 
@@ -40,6 +42,13 @@ const StyledNav = styled.nav`
 `;
 
 export default function Header() {
+  const { cart } = useContext(CartContext);
+  const [isMounted, setIsMounted] = useState(false);
+  
+  useEffect(() => { 
+    setIsMounted(true);
+  }, []);
+
   return (
     <StyledHeader>
       <Center>
@@ -52,7 +61,7 @@ export default function Header() {
             <NavLink href={'/products'}>All products</NavLink>
             <NavLink href={'/categories'}>Categories</NavLink>
             <NavLink href={'/account'}>Account</NavLink>
-            <NavLink href={'/cart'}>Cart (0)</NavLink>
+            <NavLink href={'/cart'}>Cart ({isMounted ? cart.length : '...'})</NavLink>
           </StyledNav>
        </Wrapper>  
       </Center>
