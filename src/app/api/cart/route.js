@@ -4,13 +4,16 @@ import { Product } from "../../../../models/Product";
 
 export async function POST(req) {
   try {
-    const { ids } = await req.json();
-    console.log("ids from post", ids);
+    const cartItems = await req.json();
+    console.log("cart items in post req body ", cartItems);
     await mongooseConnect();
 
-    if (!ids || !ids.length) {
+    if (!cartItems || !cartItems.length) {
       return NextResponse.json([]);
     }
+    //  extract product ids
+    const ids = cartItems.map((item) => item.productId);
+    console.log("ids in route.js", ids);
     const product = await Product.find({ _id: { $in: ids } });
     return NextResponse.json(product);
   } catch (error) {

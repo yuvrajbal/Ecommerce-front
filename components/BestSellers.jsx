@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useContext } from "react";
 import { CartContext } from "./CartContext";
 
+
 const ProductsGrid = styled.div`
   display: grid;
   grid-template-columns: 1fr 1fr 1fr 1fr 1fr ;
@@ -15,7 +16,7 @@ const ProductsGrid = styled.div`
   grid-template-columns: 1fr 1fr;
 }
 `;
-const QuickBuyButton = styled.button`
+const QuickBuyButton = styled(Link)`
   background-color: #003942;
   color: white;
   text-transform: uppercase;
@@ -32,6 +33,7 @@ const ProductContainer = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  border: 1px solid #003942;
 `;
 
 const SectionHeading = styled.h1`
@@ -59,7 +61,10 @@ const ViewAll = styled(Link)`
 `;
 
 export default function BestSellers({ products }) {
-  // console.log(products);
+  console.log(products);
+
+
+
   const sortedProducts = products.sort((a,b) => {
     const rankA = parseInt(a.properties.rank,10);
     const rankB = parseInt(b.properties.rank,10);
@@ -69,24 +74,30 @@ export default function BestSellers({ products }) {
   
   const { addProduct } = useContext(CartContext);
 
+  // go to product page to select flavour and size
   function addFeaturedtoCart(prodId){
-    addProduct(prodId); 
+    // router.push(`/product/${prodId}`);
+    // addProduct(prodId); 
+
   }
   return (
     <Center>
       
       <SectionHeading>Best Sellers</SectionHeading>
+      
       <ProductsGrid>
 
         {topProducts.map((product) => (
           <ProductContainer key={product._id}>
           <ProductBox {...product} />
-         <QuickBuyButton onClick={() => addFeaturedtoCart(product._id)}>Quick Buy</QuickBuyButton> 
+         <QuickBuyButton href ={`/product/${product._id}`} onClick={() => addFeaturedtoCart(product._id)}>Quick Buy</QuickBuyButton> 
           </ProductContainer>
         ))}
       
       </ProductsGrid>
+      
       <ViewAll href={"/products/bestsellers"}> View All</ViewAll>
+    
     </Center>
   );
 }

@@ -1,5 +1,4 @@
 "use client";
-import Header from "../../../components/Header";
 import { createGlobalStyle } from "styled-components";
 import { CartContextProvider } from "../../../components/CartContext";
 const GlobalStyles = createGlobalStyle`
@@ -12,7 +11,7 @@ export default function CartLayout({ children }) {
   return (
     <>
       <GlobalStyles />
-      {children}
+      <CartContextProvider>{children}</CartContextProvider>
     </>
   );
 }

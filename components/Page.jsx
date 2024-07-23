@@ -1,7 +1,7 @@
 "use client";
 import { createGlobalStyle } from "styled-components";
 import Header from "./Header";
-import Featured from "./Featured";
+import CategoryLinks from "./Featured";
 import BestSellers from "./BestSellers";
 import PickYourProtein from "./PickYourProtein";
 import Footer from "./Footer";
@@ -18,13 +18,13 @@ export default function Page({ products }) {
     <>
       <GlobalStyles />
 
-        <CartContextProvider>
-        <Header />
-        <Featured />
+        {/* <CartContextProvider> */}
+        {/* <Header /> */}
+        <CategoryLinks />
         <BestSellers products ={products} />
         <PickYourProtein/>
         <Footer />
-        </CartContextProvider>
+        {/* </CartContextProvider> */}
 
       
     </>

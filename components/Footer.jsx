@@ -275,7 +275,7 @@ export default function Footer() {
       }
       ]
 
-
+  // Card Component
   function CardComponent({heading, links}) {
     const [dropdownOpen, setDropdownOpen] = useState(false);
     const [isClient, setIsClient] = useState(false);
@@ -327,9 +327,12 @@ export default function Footer() {
     <Bg>
     <Center>
       <FooterContainer>
+        {/* Sign up and Social Media */}
         <ButtonContainer>
-
+          
           <SignupButton>Sign up </SignupButton>
+
+          {/* Social Media Links */}
           <SocialsContainer>
             <SocialsLink href={"/"}>
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-facebook" viewBox="0 0 16 16">
@@ -356,6 +359,7 @@ export default function Footer() {
         </ButtonContainer>
 
         <FlexContainer>
+          
           <CardContainer>
             <Cardheading>Help and Information</Cardheading>
             <HelpInfoCard />

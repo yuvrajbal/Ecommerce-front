@@ -7,7 +7,7 @@ import { CartContext } from "./CartContext";
 
 
 const StyledHeader = styled.header`
-  background-color: #222;
+  background-color: #EBE4D4;
 `;
 
 const Logo = styled(Link)`
@@ -28,7 +28,7 @@ const Wrapper = styled.div`
 `;
 
 const NavLink = styled(Link)`
-  color:#aaa;
+  color: black;
   text-decoration:none;
 `;
 
@@ -49,19 +49,28 @@ export default function Header() {
     setIsMounted(true);
   }, []);
 
+  
+  function calculateTotal(cart) {
+    let total = 0;
+    for (const product of cart) {
+      total +=  product.quantity;
+    }
+    return total;
+  }
+
   return (
     <StyledHeader>
       <Center>
         <Wrapper>
           <Logo href={'/'}>
-            <LogoImage src="/tncLogo.webp" alt="logo" />
+            <LogoImage src="/Tnc-logo.png" alt="logo" />
              </Logo>
           <StyledNav>
             <NavLink href={'/'}>Home</NavLink>
             <NavLink href={'/products'}>All products</NavLink>
             <NavLink href={'/categories'}>Categories</NavLink>
             <NavLink href={'/account'}>Account</NavLink>
-            <NavLink href={'/cart'}>Cart ({isMounted ? cart.length : '...'})</NavLink>
+            <NavLink href={'/cart'}>Cart ({isMounted ? calculateTotal(cart) : '...'})</NavLink>
           </StyledNav>
        </Wrapper>  
       </Center>

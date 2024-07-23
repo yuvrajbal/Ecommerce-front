@@ -84,7 +84,7 @@ const FeaturedContainer = styled.div`
   justify-content: center;
 `;
 
-export default function Featured() {  
+export default function CategoryLinks() {  
   return (
     <Bg>
         <FeaturedContainer>
