@@ -260,22 +260,16 @@ export default function Cart() {
   const [giftSelected, setGiftSelected] = useState(false);
   const isEmpty = cart?.length === 0;
 
-  // for (const productId of cart) {
-  //   const price =
-  //     cartItems.find((product) => product._id === productId)?.price || 0;
-  //   total += price;
-  // }
-
-  // async function sendCartItems() {
-  //   try {
-  //     const response = await axios.post("/api/cart", cart);
-  //     console.log("response", response.data);
-  //     // setCartItems(response.data);
-  //     // }
-  //   } catch (error) {
-  //     console.error(error);
-  //   }
-  // }
+  async function sendCartItems() {
+    try {
+      const response = await axios.post("/api/cart", cart);
+      console.log("response", response.data);
+      // setCartItems(response.data);
+      // }
+    } catch (error) {
+      console.error(error);
+    }
+  }
 
   function calculateTotal() {
     let total = 0;
@@ -285,11 +279,6 @@ export default function Cart() {
     return total;
   }
 
-  // useEffect(() => {
-  //   // sendCartItems();
-
-  // }, [cart]);
-
   return (
     <Center>
       {/* Heading and checkout button */}
@@ -297,7 +286,7 @@ export default function Cart() {
         <CartHeading>Your Shopping Cart</CartHeading>
 
         {!isEmpty && (
-          <CheckoutButton href={"/checkout"}>
+          <CheckoutButton onClick={() => sendCartItems()} href={"/checkout"}>
             <svg
               xmlns="http://www.w3.org/2000/svg"
               viewBox="0 0 24 24"

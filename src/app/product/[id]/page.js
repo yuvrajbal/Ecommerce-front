@@ -429,8 +429,8 @@ export default function ProductInfoPage({ params }) {
         const weightCategory = response.data.categoryProperties.find(
           (category) => category.name === "Weight"
         );
-        setSelectedFlavor(flavourCategory.values[0]);
-        setSelectedWeight(weightCategory.values[0]);
+        setSelectedFlavor(flavourCategory?.values[0]);
+        setSelectedWeight(weightCategory?.values[0]);
 
         console.log("product", response.data);
       } catch (error) {

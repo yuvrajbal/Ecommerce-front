@@ -18,7 +18,6 @@ export async function GET(req, { params }) {
       ...product.toObject(),
       categoryProperties: categoryProperties,
     };
-    console.log("responseData", responseData);
     return NextResponse.json(responseData);
   } catch (error) {
     console.log(error);

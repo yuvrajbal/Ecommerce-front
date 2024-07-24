@@ -8,7 +8,7 @@ import convertToSubcurrency from "../../../lib/convertToSubcurrency";
 import CheckoutPage from "../../../components/CheckoutPage";
 import { Elements } from "@stripe/react-stripe-js";
 import { loadStripe } from "@stripe/stripe-js";
-import { set } from "mongoose";
+
 
 const StyledField = styled.div`
   display: flex;
@@ -77,21 +77,25 @@ export default function CheckoutForms() {
   const [goToPayment, setGoToPayment] = useState(false);
   const [CartTotal , setCartTotal] = useState(0);
   const [clientSecret,setClientSecret] = useState(""); 
+  const { cart } = useContext(CartContext);
 
+// calculate total price from line items in order
   function calculateTotal(order) {
     const lineItems = order.line_items;
     let totalPrice = 0;
   
     lineItems?.forEach(item => {
-      const unitPrice = item.price_data.unit_amount;
-      const quantity = item.quantity;
-      totalPrice += unitPrice ;
+      const unitPrice = Number(item.price_data.unit_amount);
+      const quantity = Number(item.quantity);
+      totalPrice += quantity* unitPrice ;
     });
   
     return totalPrice;
   }
 
   function Address() {
+
+    // states in india
     const statesInIndia = [
       "Andhra Pradesh",
       "Arunachal Pradesh",
@@ -140,7 +144,7 @@ export default function CheckoutForms() {
       city: "",
       state: "",
       number: "",
-      products: useContext(CartContext).cart.join(","),
+      products: cart,
     });
 
     // update the state when the input value changes
@@ -169,34 +173,37 @@ export default function CheckoutForms() {
       <FormContainer>
         <FormTitle>1. Email and delivery address</FormTitle>
         <form onSubmit={handleSubmit}>
-        <StyledField>
-          <StyledLabel htmlFor="email">*Email address</StyledLabel>
-          <StyledInput
-            id="email"
-            name="email"
-            type="email"
-            value={formData.email}
-            onChange={handleChange}
-            required
-            
-          />
-        </StyledField>
+          {/* email */}
+          <StyledField>
+            <StyledLabel htmlFor="email">*Email address</StyledLabel>
+            <StyledInput
+              id="email"
+              name="email"
+              type="email"
+              value={formData.email}
+              onChange={handleChange}
+              required
+              
+            />
+          </StyledField>
 
-        <StyledField>
-          <StyledLabel htmlFor="country">*Country</StyledLabel>
-          <StyledSelect
-            id="country"
-            value={formData.country}
-            onChange={handleChange}
-            disabled
-          >
-            <option value="India">India</option>
-            <option value="Canada">Canada</option>
-            <option value="Dubai">Dubai</option>
-          </StyledSelect>
-        </StyledField>
+          {/* country */}
+          <StyledField>
+            <StyledLabel htmlFor="country">*Country</StyledLabel>
+            <StyledSelect
+              id="country"
+              value={formData.country}
+              onChange={handleChange}
+              disabled
+            >
+              <option value="India">India</option>
+              <option value="Canada">Canada</option>
+              <option value="Dubai">Dubai</option>
+            </StyledSelect>
+          </StyledField>
 
-        <StyledField>
+          {/* full name */}
+          <StyledField>
           <StyledLabel htmlFor="name">*Full Name</StyledLabel>
           <StyledInput
             type="text"
@@ -206,73 +213,78 @@ export default function CheckoutForms() {
             onChange={handleChange}
             required
           />
-        </StyledField>
+          </StyledField>
 
-        <StyledField>
-          <StyledLabel htmlFor="zipcode">*Postal Code/Zip</StyledLabel>
-          <StyledInput
-            type="text"
-            id="zipcode"
-            name="zipcode"
-            value={formData.zipcode}
-            onChange={handleChange}
-            required
-          />
-        </StyledField>
+          {/* postal code */}
+          <StyledField>
+            <StyledLabel htmlFor="zipcode">*Postal Code/Zip</StyledLabel>
+            <StyledInput
+              type="text"
+              id="zipcode"
+              name="zipcode"
+              value={formData.zipcode}
+              onChange={handleChange}
+              required
+            />
+          </StyledField>
 
-        <StyledField>
-          <StyledLabel htmlFor="street">*Address(Street)</StyledLabel>
-          <StyledInput
-            type="text"
-            name="street"
-            id="street"
-            value={formData.street}
-            onChange={handleChange}
-            required
-          />
-        </StyledField>
+          {/* street */}
+          <StyledField>
+            <StyledLabel htmlFor="street">*Address(Street)</StyledLabel>
+            <StyledInput
+              type="text"
+              name="street"
+              id="street"
+              value={formData.street}
+              onChange={handleChange}
+              required
+            />
+          </StyledField>
 
-        <StyledField>
-          <StyledLabel htmlFor="city">*City</StyledLabel>
-          <StyledInput
-            type="text"
-            name="city"
-            id="city"
-            value={formData.city}
-            onChange={handleChange}
-            required
-          />
-        </StyledField>
+          {/* city */}
+          <StyledField>
+            <StyledLabel htmlFor="city">*City</StyledLabel>
+            <StyledInput
+              type="text"
+              name="city"
+              id="city"
+              value={formData.city}
+              onChange={handleChange}
+              required
+            />
+          </StyledField>
 
-        <StyledField>
-          <StyledLabel htmlFor="state">*State</StyledLabel>
-          <StyledSelect
-            name="state"
-            id="state"
-            value={formData.state}
-            onChange={handleChange}
-            required
-          >
-            <option value="">Select a state</option>
-            {statesInIndia.map((state, index) => (
-              <option key={index} value={state}>
-                {state}
-              </option>
-            ))}
-          </StyledSelect>
-        </StyledField>
+          {/* state */}
+          <StyledField>
+            <StyledLabel htmlFor="state">*State</StyledLabel>
+            <StyledSelect
+              name="state"
+              id="state"
+              value={formData.state}
+              onChange={handleChange}
+              required
+            >
+              <option value="">Select a state</option>
+              {statesInIndia.map((state, index) => (
+                <option key={index} value={state}>
+                  {state}
+                </option>
+              ))}
+            </StyledSelect>
+          </StyledField>
 
-        <StyledField>
-          <StyledLabel htmlFor="number">*Contact Number</StyledLabel>
-          <StyledInput
-            type="number"
-            name="number"
-            id="number"
-            value={formData.number}
-            onChange={handleChange}
-            required
-          />
-        </StyledField>
+          {/* contact number */}
+          <StyledField>
+            <StyledLabel htmlFor="number">*Contact Number</StyledLabel>
+            <StyledInput
+              type="number"
+              name="number"
+              id="number"
+              value={formData.number}
+              onChange={handleChange}
+              required
+            />
+          </StyledField>
 
         <StyledButton type="submit">Continue</StyledButton>
         </form>

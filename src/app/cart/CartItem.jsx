@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import { CartContext } from "../../../components/CartContext";
 import { useContext, useEffect } from "react";
-
+import axios from "axios";
 const ShoppingCartContainer = styled.div` 
 
 
@@ -194,6 +194,27 @@ const Price = styled.div`
 export default function CartItem() {
   const { addProduct, cart, decreaseProductCount, removeProduct } = useContext(CartContext);
   
+  
+  
+  async function sendCartItems() {
+    try {
+      const response = await axios.post("/api/cart", cart);
+      console.log("response", response.data);
+      console.log("Sent cart items to the server");
+    } catch (error) {
+      console.error(error);
+    }
+  }
+  useEffect(() => {
+    if (cart && cart.length > 0) {
+      console.log("Cart updated, sending cart items to the server...");
+      sendCartItems();
+    } else {
+      console.log("Cart is empty, not sending cart items to the server.");
+    }
+  }, [cart]);
+
+
   // product is cart item type which has { productId, flavour, weight, quantity, price, title, imageLink },
   function decreaseCount(product){
     decreaseProductCount(product.productId, product.flavour, product.weight, 1, product.price,product.title,product.imageLink);
@@ -217,7 +238,7 @@ export default function CartItem() {
       </TableHeadingContainer>
 
       {cart?.length> 0 && cart?.map((product) => (
-        <CartItemContainer >
+        <CartItemContainer key={product.productId + product.flavour + product.weight}>
           
           <ImageContainer>
             <img src={product.imageLink} alt="" />
@@ -225,7 +246,10 @@ export default function CartItem() {
 
           <ItemspecContainer>
             <ItemSpecs>
-              {product.title + " " + product.flavour + " " + product.weight} 
+              {product.title } 
+              {product.flavour && " " + product.flavour}
+              {product.weight && " " + product.weight}
+              
             </ItemSpecs>
             <ItemCount>
               <ModifyCountButton onClick={() => decreaseCount(product)}> -
