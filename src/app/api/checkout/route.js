@@ -5,6 +5,17 @@ import { Order } from "../../../../models/Order";
 import Stripe from "stripe";
 
 export async function POST(req) {
+  function calculateTotal(lineItems) {
+    let totalPrice = 0;
+
+    lineItems?.forEach((item) => {
+      const unitPrice = Number(item.price_data.unit_amount);
+      const quantity = Number(item.quantity);
+      totalPrice += quantity * unitPrice;
+    });
+
+    return totalPrice;
+  }
   try {
     const {
       email,
@@ -96,6 +107,9 @@ export async function POST(req) {
       }
     }
 
+    // calculate total price
+    const CartTotal = calculateTotal(line_items);
+    console.log("CartTotal in route.js", CartTotal);
     // order doc in the database
     const orderDoc = await Order.create({
       line_items,
@@ -107,6 +121,7 @@ export async function POST(req) {
       state,
       number,
       paid: false,
+      cartTotal: CartTotal,
     });
 
     return NextResponse.json(orderDoc);

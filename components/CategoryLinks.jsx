@@ -1,7 +1,11 @@
-"use client";
+
 import Center from "./Center";
 import styled from "styled-components";
 import Link from 'next/link';
+import{ mongooseConnect} from "../lib/mongoose";
+
+
+
 const Bg = styled.div`
   // background-color: #222;
   background-color: #EBE4D4;
@@ -84,7 +88,30 @@ const FeaturedContainer = styled.div`
   justify-content: center;
 `;
 
+
+// async function findCategoryId(categoryName) {
+//   // await mongooseConnect();
+//   try {
+//     const category = await Category.findOne({ name: categoryName });
+//     if (!category) {
+//       console.error(`Category ${categoryName} not found.`);
+//       return [];
+//     }
+//     return category._id;
+//   }
+//   catch (error) {
+//     console.error(error);
+//     return [];
+//   }
+// }
+
+
 export default function CategoryLinks() {  
+  
+  // const proteinId = getCategoryId('Protein');
+  // const bestSellerId = getCategoryId('Best Sellers');
+  // console.log(proteinId);
+  // console.log(bestSellerId);
   return (
     <Bg>
         <FeaturedContainer>
@@ -94,12 +121,12 @@ export default function CategoryLinks() {
         </FeaturedContainer>
         <Center>
         <CategoryButtonContainer>
-          <CategoryButton href={'/nutrition/protein'}> Protein</CategoryButton>
-          <CategoryButton href={'/nutrition/power&strength'}> Strength</CategoryButton>
-          <CategoryButton href={'/nutrition/musclebuilding'}> Muscle </CategoryButton>
-          <CategoryButton href={'/nutrition/weightmanagement'}> Weight </CategoryButton>
-          <CategoryButton href={'/nutrition/vitamins'}> Vitamins</CategoryButton>
-          <CategoryButton href={'/nutrition/health&wellness'}>Health</CategoryButton>
+          <CategoryButton href={'/nutrition/6684ac1855823520ee3925e9'}> Protein</CategoryButton>
+          <CategoryButton href={'/nutrition/66863a6bace0a615eba4ed3a'}> Strength</CategoryButton>
+          <CategoryButton href={'/nutrition/66863a6bace0a615eba4ed3a'}> Muscle </CategoryButton>
+          <CategoryButton href={'/nutrition/66863a6bace0a615eba4ed3a'}> Weight </CategoryButton>
+          <CategoryButton href={'/nutrition/66863a6bace0a615eba4ed3a'}> Vitamins</CategoryButton>
+          <CategoryButton href={'/nutrition/66863a6bace0a615eba4ed3a'}>Health</CategoryButton>
         </CategoryButtonContainer>
       </Center>
     </Bg>

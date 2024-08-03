@@ -1,11 +1,12 @@
 "use client";
 import { createGlobalStyle } from "styled-components";
 import Header from "./Header";
-import CategoryLinks from "./Featured";
+import CategoryLinks from "./CategoryLinks";
 import BestSellers from "./BestSellers";
 import PickYourProtein from "./PickYourProtein";
 import Footer from "./Footer";
-import { CartContextProvider } from "./CartContext";
+// import { getCategoryId } from "./GetCategory";
+// import { CartContextProvider } from "./CartContext";
 const GlobalStyles = createGlobalStyle`
   body {
     padding:0px;
@@ -14,19 +15,15 @@ const GlobalStyles = createGlobalStyle`
 
 export default function Page({ products }) {
   // console.log(product);
+  // const proteinId = getCategoryId("Protein");
   return (
     <>
       <GlobalStyles />
 
-        {/* <CartContextProvider> */}
-        {/* <Header /> */}
-        <CategoryLinks />
-        <BestSellers products ={products} />
-        <PickYourProtein/>
-        <Footer />
-        {/* </CartContextProvider> */}
-
-      
+      <CategoryLinks />
+      <BestSellers products={products} />
+      <PickYourProtein />
+      <Footer />
     </>
   );
 }

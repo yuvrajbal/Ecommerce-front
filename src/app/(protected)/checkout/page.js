@@ -1,4 +1,3 @@
-"use client";
 import CheckoutForms from "./CheckoutForms";
 
 export default function CheckoutPage() {

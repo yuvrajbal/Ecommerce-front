@@ -2,10 +2,10 @@
 import { useEffect, useState } from "react";
 import styled from "styled-components";
 import { useContext } from "react";
-import { CartContext } from "../../../components/CartContext";
+import { CartContext } from "../../cart/CartContext";
 import axios from "axios";
-import convertToSubcurrency from "../../../lib/convertToSubcurrency";
-import CheckoutPage from "../../../components/CheckoutPage";
+import convertToSubcurrency from "../../../../lib/convertToSubcurrency";
+import CheckoutPage from "../../../../components/CheckoutPage";
 import { Elements } from "@stripe/react-stripe-js";
 import { loadStripe } from "@stripe/stripe-js";
 
@@ -79,20 +79,6 @@ export default function CheckoutForms() {
   const [clientSecret,setClientSecret] = useState(""); 
   const { cart } = useContext(CartContext);
 
-// calculate total price from line items in order
-  function calculateTotal(order) {
-    const lineItems = order.line_items;
-    let totalPrice = 0;
-  
-    lineItems?.forEach(item => {
-      const unitPrice = Number(item.price_data.unit_amount);
-      const quantity = Number(item.quantity);
-      totalPrice += quantity* unitPrice ;
-    });
-  
-    return totalPrice;
-  }
-
   function Address() {
 
     // states in india
@@ -161,7 +147,8 @@ export default function CheckoutForms() {
         setPostResponse(response.data);
         // await axios.post ("/api/orders")
         console.log("response from post request",response.data);
-        const total = calculateTotal(response.data);
+        // const total = calculateTotal(response.data);
+        const total = response.data.cartTotal;
         setCartTotal(total);
         setGoToPayment(true);
       } catch (error) {

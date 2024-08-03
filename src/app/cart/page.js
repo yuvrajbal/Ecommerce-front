@@ -1,13 +1,13 @@
 "use client";
 import Center from "../../../components/Center";
 import styled from "styled-components";
-import { CartContext } from "../../../components/CartContext";
+import { CartContext } from "./CartContext";
 import { useContext, useState, useEffect } from "react";
 import CartItem from "./CartItem";
 import axios from "axios";
 import Link from "next/link";
 import Recommendations from "./Recommendations";
-
+import { useUser } from "@clerk/nextjs";
 const CartHeadingContainer = styled.div`
   display: flex;
   flex-direction: column;
@@ -253,12 +253,18 @@ const Pal = styled.span`
 export default function Cart() {
   const { cart } = useContext(CartContext);
 
-  let CartTotal = calculateTotal();
-  console.log("cart total", CartTotal);
+  // let originalTotal,
+  //   CartTotal = calculateTotal();
+
+  // console.log("cart total", CartTotal);
   console.log("cart items from context", cart);
   // const [cartItems, setCartItems] = useState([]);
   const [giftSelected, setGiftSelected] = useState(false);
   const isEmpty = cart?.length === 0;
+  const [discount, setDiscount] = useState(0);
+  const [discountApplied, setDiscountApplied] = useState(false);
+  const [discountCode, setDiscountCode] = useState("");
+  const [totals, setTotals] = useState({ total: 0, originalTotal: 0 });
 
   async function sendCartItems() {
     try {
@@ -271,14 +277,28 @@ export default function Cart() {
     }
   }
 
+  // calculate total and original total
   function calculateTotal() {
     let total = 0;
+    let originalTotal = 0;
     for (const product of cart) {
       total += product.price * product.quantity;
+      originalTotal += product.originalPrice * product.quantity;
     }
-    return total;
+    // console.log("total", total);
+    // console.log("original total", originalTotal);
+    return { total, originalTotal };
   }
 
+  // find total and orginal total when cart changes
+  useEffect(() => {
+    const { total, originalTotal } = calculateTotal();
+    setTotals({ total, originalTotal });
+    console.log("totals", totals);
+  }, [cart]);
+
+  const { user } = useUser();
+  console.log("user", user);
   return (
     <Center>
       {/* Heading and checkout button */}
@@ -311,6 +331,7 @@ export default function Cart() {
       ) : (
         <FlexContainer>
           <CartContainer>
+            {/* cart table that sends req to /api/cart */}
             <CartItem />
           </CartContainer>
 
@@ -355,6 +376,8 @@ export default function Cart() {
           <Styledinput
             type="text"
             placeholder="Got a discount code? Enter it"
+            value={discount}
+            onChange={(e) => setDiscountCode(e.target.value)}
           />
           <DiscountButton>Use Code</DiscountButton>
         </DiscountCodeContainer>
@@ -366,14 +389,16 @@ export default function Cart() {
           <TotalRow>
             <TotalColumn>Cart Subtotal:</TotalColumn>
 
-            <TotalColumn>INR {CartTotal}</TotalColumn>
+            <TotalColumn>INR {totals.total}</TotalColumn>
           </TotalRow>
 
           <SavingsContainer>
             <TotalRow>
               <TotalColumn>Total saving from MRP</TotalColumn>
 
-              <TotalColumn>INR </TotalColumn>
+              <TotalColumn>
+                {Number(totals.originalTotal) - Number(totals.total)} INR{" "}
+              </TotalColumn>
             </TotalRow>
 
             <TotalRow>
@@ -388,7 +413,7 @@ export default function Cart() {
       {/* Checkout buttons */}
       {!isEmpty && (
         <>
-          <CheckoutButton href={"/checkout"}>
+          <CheckoutButton onClick={() => sendCartItems()} href={"/checkout"}>
             <svg
               xmlns="http://www.w3.org/2000/svg"
               viewBox="0 0 24 24"
@@ -404,7 +429,7 @@ export default function Cart() {
             Checkout Securely Now
           </CheckoutButton>
 
-          <PaypalButton href={"/checkout"}>
+          <PaypalButton onClick={() => sendCartItems()} href={"/checkout"}>
             <svg
               xmlns="http://www.w3.org/2000/svg"
               aria-label="PayPal"
@@ -439,7 +464,7 @@ export default function Cart() {
             </Pay>
           </PaypalButton>
 
-          <GpayButton href={"/checkout"}>
+          <GpayButton onClick={() => sendCartItems()} href={"/checkout"}>
             <img src="google.svg" alt="" />
             Pay
           </GpayButton>

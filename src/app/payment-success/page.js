@@ -1,6 +1,7 @@
 "use client";
 import styled from "styled-components";
-
+import { CartContext } from "../cart/CartContext";
+import { useContext, useEffect } from "react";
 const Main = styled.main`
   max-width: 6xl;
   margin: 10px auto;
@@ -37,11 +38,15 @@ const Amount = styled.div`
 `;
 
 export default function PaymentSuccess({ searchParams: { amount } }) {
+  const { clearCart } = useContext(CartContext);
+  useEffect(() => {
+    clearCart();
+  }, []);
   return (
     <Main>
       <Container>
-        <Title>Thank you!</Title>
-        <SubTitle>You successfully paid</SubTitle>
+        <Title>Your order was succesfull ! </Title>
+        <SubTitle>You will receive an email shortly!</SubTitle>
         <Amount>INR {amount}</Amount>
       </Container>
     </Main>

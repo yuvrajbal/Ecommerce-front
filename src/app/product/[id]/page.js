@@ -3,7 +3,7 @@ import { useState, useEffect, useContext } from "react";
 import axios from "axios";
 import styled from "styled-components";
 import Center from "../../../../components/Center";
-import { CartContext } from "../../../../components/CartContext";
+import { CartContext } from "../../cart/CartContext";
 import { set } from "mongoose";
 
 const Container = styled.div`
@@ -39,7 +39,7 @@ const WhiteBox = styled.div`
 `;
 
 const Styledh4 = styled.h4`
-  font-size: 1rem;
+  font-size: 1.2rem;
   font-weight: 600;
   padding: 0;
   margin-bottom: 0.3em;
@@ -133,6 +133,22 @@ const NutritionImageContainer = styled.div`
   img {
     width: 100%;
     height: auto;
+  }
+`;
+
+const Strikethrough = styled.span`
+  text-decoration: line-through;
+  // margin-left: 0.5em;
+  display: flex;
+  align-items: center;
+  font-weight: 400;
+  font-size: 0.9rem;
+  color: gray;
+  padding-left: 1em;
+  svg {
+    height: 1.2rem;
+    width: 1.2rem;
+    margin: 0;
   }
 `;
 
@@ -371,11 +387,12 @@ function AboutProduct({ product }) {
 export default function ProductInfoPage({ params }) {
   const [product, setProduct] = useState(null);
   const [price, setPrice] = useState(null);
+  const [originalPrice, setOriginalPrice] = useState(null);
   const { id } = params;
   const [selectedFlavor, setSelectedFlavor] = useState("");
   const [selectedWeight, setSelectedWeight] = useState("");
-
   const [count, setCount] = useState(1);
+  const siteWideDiscount = 25;
 
   const handleFlavorChange = (event) => {
     setSelectedFlavor(event.target.value);
@@ -385,6 +402,9 @@ export default function ProductInfoPage({ params }) {
     setSelectedWeight(event.target.value);
     updatePrice(event.target.value);
   };
+
+  const higherDiscount =
+    product?.discount > siteWideDiscount ? product?.discount : siteWideDiscount;
 
   // update price based on price and flavour
   const updatePrice = (weight) => {
@@ -409,7 +429,23 @@ export default function ProductInfoPage({ params }) {
     setPrice(
       product.categoryProperties[pricePropertyIndex]?.values[weightIndex]
     );
+
+    const newOriginalPrice = Math.ceil(
+      Number(price) * (100 / (100 - Number(higherDiscount)))
+    );
+    console.log("newOriginalPrice", newOriginalPrice);
+    // setOriginalPrice(newOriginalPrice);
   };
+
+  // update original price based on price and discount
+  useEffect(() => {
+    const newOriginalPrice = Math.ceil(
+      Number(price) * (100 / (100 - Number(higherDiscount)))
+    );
+    // console.log("newOriginalPrice", newOriginalPrice);
+    // setOriginalPrice(newOriginalPrice);
+    setOriginalPrice(newOriginalPrice);
+  }, [price]);
 
   // Fetch product data from the database
   useEffect(() => {
@@ -422,6 +458,11 @@ export default function ProductInfoPage({ params }) {
 
         setProduct(response.data);
         setPrice(response.data.price);
+
+        const higherOriginalPrice = Math.ceil(
+          Number(response.data.price) * (100 / (100 - Number(higherDiscount)))
+        );
+        setOriginalPrice(higherOriginalPrice);
 
         const flavourCategory = response.data.categoryProperties.find(
           (category) => category.name === "Flavour"
@@ -461,7 +502,7 @@ export default function ProductInfoPage({ params }) {
     setCount(count + 1);
   }
 
-  console.log("price", price);
+  // console.log("price", price);
 
   function handleAddtoCart(
     productId,
@@ -470,9 +511,11 @@ export default function ProductInfoPage({ params }) {
     count,
     price,
     title,
-    imageLink
+    imageLink,
+    originalPrice
   ) {
     console.log(selectedFlavor, selectedWeight);
+    console.log("count", count);
     addProduct(
       productId,
       selectedFlavor,
@@ -480,10 +523,30 @@ export default function ProductInfoPage({ params }) {
       count,
       price,
       title,
-      imageLink
+      imageLink,
+      originalPrice
     );
     console.log("added product", cart);
   }
+
+  async function sendCartItems() {
+    try {
+      const response = await axios.post("/api/cart", cart);
+      console.log("response", response.data);
+      console.log("Sent cart items to the server");
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  // useEffect(() => {
+  //   if (cart && cart.length > 0) {
+  //     console.log("Cart updated, sending cart items to the server...");
+  //     sendCartItems();
+  //   } else {
+  //     console.log("Cart is empty, not sending cart items to the server.");
+  //   }
+  // }, [cart]);
 
   return (
     <div>
@@ -517,6 +580,23 @@ export default function ProductInfoPage({ params }) {
               />
             </svg>
             {price}
+            <Strikethrough>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                strokeWidth={1.5}
+                stroke="currentColor"
+                className="size-6"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M15 8.25H9m6 3H9m3 6-3-3h1.5a3 3 0 1 0 0-6M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
+                />
+              </svg>
+              {originalPrice}
+            </Strikethrough>
           </Styledh4>
 
           {/* Properties */}
@@ -561,7 +641,8 @@ export default function ProductInfoPage({ params }) {
                 count,
                 price,
                 product.title,
-                product.images[0]
+                product.images[0],
+                originalPrice
               )
             }
           >

@@ -13,6 +13,7 @@ const OrderSchema = new Schema(
     state: String,
     number: String,
     paid: Boolean,
+    cartTotal: Number,
   },
   {
     timestamps: true,

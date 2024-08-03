@@ -1,7 +1,7 @@
 "use client";
 import Header from "../../../../components/Header";
 import { createGlobalStyle } from "styled-components";
-import { CartContextProvider } from "../../../../components/CartContext";
+import { CartContextProvider } from "../../cart/CartContext";
 const GlobalStyles = createGlobalStyle`
   body {
     padding:0px;

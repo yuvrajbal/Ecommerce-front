@@ -3,7 +3,7 @@ import Link from 'next/link';
 import styled from 'styled-components';
 import Center from './Center';
 import { useContext, useEffect,useState } from "react";
-import { CartContext } from "./CartContext";
+import { CartContext } from "../src/app/cart/CartContext";
 
 
 const StyledHeader = styled.header`
@@ -52,9 +52,12 @@ export default function Header() {
   
   function calculateTotal(cart) {
     let total = 0;
-    for (const product of cart) {
-      total +=  product.quantity;
+    if (cart && cart.length > 0) {
+      for (const product of cart) {
+        total +=  product.quantity;
+      }
     }
+  
     return total;
   }
 

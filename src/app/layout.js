@@ -1,10 +1,11 @@
-"use client";
+// "use client";
 import { Inter } from "next/font/google";
 import { Roboto } from "next/font/google";
 import Header from "../../components/Header";
-import { CartContextProvider } from "../../components/CartContext";
+import { CartContextProvider } from "./cart/CartContext";
 import { useContext } from "react";
-import { CartContext } from "../../components/CartContext";
+import { CartContext } from "./cart/CartContext";
+import { ClerkProvider } from "@clerk/nextjs";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -15,15 +16,17 @@ const inter = Inter({ subsets: ["latin"] });
 const roboto = Roboto({ subsets: ["latin"], weight: ["400"] });
 
 export default function RootLayout({ children }) {
-  const { cart } = useContext(CartContext);
+  // const { cart } = useContext(CartContext);
   return (
     <html lang="en">
       <head></head>
       <body className={roboto.className}>
-        <CartContextProvider>
-          <Header />
-          {children}
-        </CartContextProvider>
+        <ClerkProvider>
+          <CartContextProvider>
+            <Header />
+            {children}
+          </CartContextProvider>
+        </ClerkProvider>
       </body>
     </html>
   );

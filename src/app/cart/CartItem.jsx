@@ -1,7 +1,8 @@
 import styled from "styled-components";
-import { CartContext } from "../../../components/CartContext";
-import { useContext, useEffect } from "react";
+import { CartContext } from "./CartContext";
+import { useContext, useEffect,useState } from "react";
 import axios from "axios";
+import {useUser} from "@clerk/nextjs";
 const ShoppingCartContainer = styled.div` 
 
 
@@ -189,12 +190,29 @@ const Price = styled.div`
       }
 `;
 
+const Strikethrough = styled.span`
+  text-decoration: line-through;
+  // margin-left: 0.5em;
+  display: flex;
+  align-items: center;
+  font-weight: 400;
+  font-size: 0.9rem;
+  color: gray;
+  padding-left: 1em;
+  svg {
+    height: 1.2rem;
+    width: 1.2rem;
+    margin: 0;
+  }
+`;
  
 
 export default function CartItem() {
   const { addProduct, cart, decreaseProductCount, removeProduct } = useContext(CartContext);
   
-  
+  const {user} = useUser();
+
+  console.log("user", user);
   
   async function sendCartItems() {
     try {
@@ -205,14 +223,10 @@ export default function CartItem() {
       console.error(error);
     }
   }
-  useEffect(() => {
-    if (cart && cart.length > 0) {
-      console.log("Cart updated, sending cart items to the server...");
-      sendCartItems();
-    } else {
-      console.log("Cart is empty, not sending cart items to the server.");
-    }
-  }, [cart]);
+  // useEffect(() => {
+  //     sendCartItems();
+      
+  // }, [cart]);
 
 
   // product is cart item type which has { productId, flavour, weight, quantity, price, title, imageLink },
@@ -276,6 +290,12 @@ export default function CartItem() {
               <path strokeLinecap="round" strokeLinejoin="round" d="M15 8.25H9m6 3H9m3 6-3-3h1.5a3 3 0 1 0 0-6M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
               </svg>
               {product.quantity * product.price}
+              <Strikethrough>
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M15 8.25H9m6 3H9m3 6-3-3h1.5a3 3 0 1 0 0-6M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+              </svg>
+              {product.quantity * product.originalPrice}
+              </Strikethrough>
             </Price>
 
           </ItemDelete_PriceContainer>
