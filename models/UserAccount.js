@@ -4,11 +4,9 @@ const { Schema } = mongoose;
 
 const Userschema = new Schema(
   {
+    clerkUserId: {type: String, required: true, unique: true},
     name: { type: String, required: true },
     email: { type: String, required: true, unique: true },
-    password: { type: String, required: true },
-    number: { type: String },
-    referral: { type: String },
   },
   { timestamps: true }
 );

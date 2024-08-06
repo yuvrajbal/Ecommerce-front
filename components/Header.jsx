@@ -4,6 +4,7 @@ import styled from 'styled-components';
 import Center from './Center';
 import { useContext, useEffect,useState } from "react";
 import { CartContext } from "../src/app/cart/CartContext";
+import SearchBar from './SearchBar';
 
 
 const StyledHeader = styled.header`
@@ -37,13 +38,38 @@ const StyledNav = styled.nav`
   gap: 15px;
   align-items:center;
 
+
   @media (max-width: 768px) {
   flex-direction: column;
 `;
 
+const InputContainer = styled.div`  
+  display: flex;
+  border-radius:1rem;
+  `;
+
+
+
+const StyledInput = styled.input`
+ border:none;
+ border-radius:1rem 0 0 1rem;
+
+ `;
+
+ 
+
+
+const StyledButton = styled.button`
+  background-color: white;
+  border-radius: 0 1rem 1rem 0;
+  border:none;
+
+  `;
+
 export default function Header() {
   const { cart } = useContext(CartContext);
   const [isMounted, setIsMounted] = useState(false);
+  const [search, setSearch] = useState("");
   
   useEffect(() => { 
     setIsMounted(true);
@@ -61,6 +87,7 @@ export default function Header() {
     return total;
   }
 
+
   return (
     <StyledHeader>
       <Center>
@@ -68,6 +95,9 @@ export default function Header() {
           <Logo href={'/'}>
             <LogoImage src="/Tnc-logo.png" alt="logo" />
              </Logo>
+            <SearchBar />
+            
+            
           <StyledNav>
             <NavLink href={'/'}>Home</NavLink>
             <NavLink href={'/products'}>All products</NavLink>
