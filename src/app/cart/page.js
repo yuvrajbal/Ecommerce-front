@@ -300,47 +300,14 @@ export default function Cart() {
   const { user } = useUser();
   console.log("user", user);
   return (
-    <Center>
-      {/* Heading and checkout button */}
-      <CartHeadingContainer>
-        <CartHeading>Your Shopping Cart</CartHeading>
+    <>
+      <Center>
+        {/* Heading and checkout button */}
+        <CartHeadingContainer>
+          <CartHeading>Your Shopping Cart</CartHeading>
 
-        {!isEmpty && (
-          <CheckoutButton onClick={() => sendCartItems()} href={"/checkout"}>
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 24 24"
-              fill="currentColor"
-              className="size-6"
-            >
-              <path
-                fillRule="evenodd"
-                d="M12 1.5a5.25 5.25 0 0 0-5.25 5.25v3a3 3 0 0 0-3 3v6.75a3 3 0 0 0 3 3h10.5a3 3 0 0 0 3-3v-6.75a3 3 0 0 0-3-3v-3c0-2.9-2.35-5.25-5.25-5.25Zm3.75 8.25v-3a3.75 3.75 0 1 0-7.5 0v3h7.5Z"
-                clipRule="evenodd"
-              />
-            </svg>
-            Checkout Securely Now
-          </CheckoutButton>
-        )}
-      </CartHeadingContainer>
-
-      {isEmpty ? (
-        <EmptyCartContainer>
-          <Styledh2>There are currently no items in your basket.</Styledh2>
-        </EmptyCartContainer>
-      ) : (
-        <FlexContainer>
-          <CartContainer>
-            {/* cart table that sends req to /api/cart */}
-            <CartItem />
-          </CartContainer>
-
-          {/* Gifts */}
-          <GiftContainer>
-            <GiftHeading> Free Gift </GiftHeading>
-            <div>Enjoy free gifts with your purchase!</div>
-            <GiftQualification>
-              Qualified
+          {!isEmpty && (
+            <CheckoutButton onClick={() => sendCartItems()} href={"/checkout"}>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 24 24"
@@ -349,135 +316,170 @@ export default function Cart() {
               >
                 <path
                   fillRule="evenodd"
-                  d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12Zm13.36-1.814a.75.75 0 1 0-1.22-.872l-3.236 4.53L9.53 12.22a.75.75 0 0 0-1.06 1.06l2.25 2.25a.75.75 0 0 0 1.14-.094l3.75-5.25Z"
+                  d="M12 1.5a5.25 5.25 0 0 0-5.25 5.25v3a3 3 0 0 0-3 3v6.75a3 3 0 0 0 3 3h10.5a3 3 0 0 0 3-3v-6.75a3 3 0 0 0-3-3v-3c0-2.9-2.35-5.25-5.25-5.25Zm3.75 8.25v-3a3.75 3.75 0 1 0-7.5 0v3h7.5Z"
                   clipRule="evenodd"
                 />
               </svg>
-            </GiftQualification>
+              Checkout Securely Now
+            </CheckoutButton>
+          )}
+        </CartHeadingContainer>
 
-            <GiftCount>
-              {giftSelected ? 1 : 0}
-              /1 free gifts selected
-            </GiftCount>
+        {isEmpty ? (
+          <EmptyCartContainer>
+            <Styledh2>There are currently no items in your basket.</Styledh2>
+          </EmptyCartContainer>
+        ) : (
+          <FlexContainer>
+            <CartContainer>
+              {/* cart table that sends req to /api/cart */}
+              <CartItem />
+            </CartContainer>
 
-            <GiftButtonContainer>
-              <Giftbutton>
-                <img src="gift.jpg" alt="" />
-                <div>TNC Duffel Bag</div>
-              </Giftbutton>
-            </GiftButtonContainer>
-          </GiftContainer>
-        </FlexContainer>
-      )}
+            {/* Gifts */}
+            <GiftContainer>
+              <GiftHeading> Free Gift </GiftHeading>
+              <div>Enjoy free gifts with your purchase!</div>
+              <GiftQualification>
+                Qualified
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 24 24"
+                  fill="currentColor"
+                  className="size-6"
+                >
+                  <path
+                    fillRule="evenodd"
+                    d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12Zm13.36-1.814a.75.75 0 1 0-1.22-.872l-3.236 4.53L9.53 12.22a.75.75 0 0 0-1.06 1.06l2.25 2.25a.75.75 0 0 0 1.14-.094l3.75-5.25Z"
+                    clipRule="evenodd"
+                  />
+                </svg>
+              </GiftQualification>
 
-      {/* Discount code */}
-      {!isEmpty && (
-        <DiscountCodeContainer>
-          <Styledinput
-            type="text"
-            placeholder="Got a discount code? Enter it"
-            value={discount}
-            onChange={(e) => setDiscountCode(e.target.value)}
-          />
-          <DiscountButton>Use Code</DiscountButton>
-        </DiscountCodeContainer>
-      )}
+              <GiftCount>
+                {giftSelected ? 1 : 0}
+                /1 free gifts selected
+              </GiftCount>
 
-      {/* Cart total */}
-      {!isEmpty && (
-        <TotalAmountContainer>
-          <TotalRow>
-            <TotalColumn>Cart Subtotal:</TotalColumn>
+              <GiftButtonContainer>
+                <Giftbutton>
+                  <img src="gift.jpg" alt="" />
+                  <div>TNC Duffel Bag</div>
+                </Giftbutton>
+              </GiftButtonContainer>
+            </GiftContainer>
+          </FlexContainer>
+        )}
 
-            <TotalColumn>INR {totals.total}</TotalColumn>
-          </TotalRow>
+        {/* Discount code */}
+        {!isEmpty && (
+          <DiscountCodeContainer>
+            <Styledinput
+              type="text"
+              placeholder="Got a discount code? Enter it"
+              value={discount}
+              onChange={(e) => setDiscountCode(e.target.value)}
+            />
+            <DiscountButton>Use Code</DiscountButton>
+          </DiscountCodeContainer>
+        )}
 
-          <SavingsContainer>
+        {/* Cart total */}
+        {!isEmpty && (
+          <TotalAmountContainer>
             <TotalRow>
-              <TotalColumn>Total saving from MRP</TotalColumn>
+              <TotalColumn>Cart Subtotal:</TotalColumn>
 
-              <TotalColumn>
-                {Number(totals.originalTotal) - Number(totals.total)} INR{" "}
-              </TotalColumn>
+              <TotalColumn>INR {totals.total}</TotalColumn>
             </TotalRow>
 
-            <TotalRow>
-              <TotalColumn>Additional saving</TotalColumn>
+            <SavingsContainer>
+              <TotalRow>
+                <TotalColumn>Total saving from MRP</TotalColumn>
 
-              <TotalColumn>INR </TotalColumn>
-            </TotalRow>
-          </SavingsContainer>
-        </TotalAmountContainer>
-      )}
+                <TotalColumn>
+                  {Number(totals.originalTotal) - Number(totals.total)} INR{" "}
+                </TotalColumn>
+              </TotalRow>
 
-      {/* Checkout buttons */}
-      {!isEmpty && (
-        <>
-          <CheckoutButton onClick={() => sendCartItems()} href={"/checkout"}>
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 24 24"
-              fill="currentColor"
-              className="size-6"
-            >
-              <path
-                fillRule="evenodd"
-                d="M12 1.5a5.25 5.25 0 0 0-5.25 5.25v3a3 3 0 0 0-3 3v6.75a3 3 0 0 0 3 3h10.5a3 3 0 0 0 3-3v-6.75a3 3 0 0 0-3-3v-3c0-2.9-2.35-5.25-5.25-5.25Zm3.75 8.25v-3a3.75 3.75 0 1 0-7.5 0v3h7.5Z"
-                clipRule="evenodd"
-              />
-            </svg>
-            Checkout Securely Now
-          </CheckoutButton>
+              <TotalRow>
+                <TotalColumn>Additional saving</TotalColumn>
 
-          <PaypalButton onClick={() => sendCartItems()} href={"/checkout"}>
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              aria-label="PayPal"
-              role="img"
-              viewBox="0 0 512 512"
-              fill="#000000"
-            >
-              <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
-              <g
-                id="SVGRepo_tracerCarrier"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-              ></g>
-              <g id="SVGRepo_iconCarrier">
-                <rect width="512" height="512" rx="15%" fill="#ffffff"></rect>
+                <TotalColumn>INR </TotalColumn>
+              </TotalRow>
+            </SavingsContainer>
+          </TotalAmountContainer>
+        )}
+
+        {/* Checkout buttons */}
+        {!isEmpty && (
+          <>
+            <CheckoutButton onClick={() => sendCartItems()} href={"/checkout"}>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 24 24"
+                fill="currentColor"
+                className="size-6"
+              >
                 <path
-                  fill="#002c8a"
-                  d="M377 184.8L180.7 399h-72c-5 0-9-5-8-10l48-304c1-7 7-12 14-12h122c84 3 107 46 92 112z"
-                ></path>
-                <path
-                  fill="#009be1"
-                  d="M380.2 165c30 16 37 46 27 86-13 59-52 84-109 85l-16 1c-6 0-10 4-11 10l-13 79c-1 7-7 12-14 12h-60c-5 0-9-5-8-10l22-143c1-5 182-120 182-120z"
-                ></path>
-                <path
-                  fill="#001f6b"
-                  d="M197 292l20-127a14 14 0 0 1 13-11h96c23 0 40 4 54 11-5 44-26 115-128 117h-44c-5 0-10 4-11 10z"
-                ></path>
-              </g>
-            </svg>
-            <Pay>
-              Pay<Pal>Pal</Pal>
-            </Pay>
-          </PaypalButton>
+                  fillRule="evenodd"
+                  d="M12 1.5a5.25 5.25 0 0 0-5.25 5.25v3a3 3 0 0 0-3 3v6.75a3 3 0 0 0 3 3h10.5a3 3 0 0 0 3-3v-6.75a3 3 0 0 0-3-3v-3c0-2.9-2.35-5.25-5.25-5.25Zm3.75 8.25v-3a3.75 3.75 0 1 0-7.5 0v3h7.5Z"
+                  clipRule="evenodd"
+                />
+              </svg>
+              Checkout Securely Now
+            </CheckoutButton>
 
-          <GpayButton onClick={() => sendCartItems()} href={"/checkout"}>
-            <img src="google.svg" alt="" />
-            Pay
-          </GpayButton>
-        </>
-      )}
+            <PaypalButton onClick={() => sendCartItems()} href={"/checkout"}>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                aria-label="PayPal"
+                role="img"
+                viewBox="0 0 512 512"
+                fill="#000000"
+              >
+                <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                <g
+                  id="SVGRepo_tracerCarrier"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                ></g>
+                <g id="SVGRepo_iconCarrier">
+                  <rect width="512" height="512" rx="15%" fill="#ffffff"></rect>
+                  <path
+                    fill="#002c8a"
+                    d="M377 184.8L180.7 399h-72c-5 0-9-5-8-10l48-304c1-7 7-12 14-12h122c84 3 107 46 92 112z"
+                  ></path>
+                  <path
+                    fill="#009be1"
+                    d="M380.2 165c30 16 37 46 27 86-13 59-52 84-109 85l-16 1c-6 0-10 4-11 10l-13 79c-1 7-7 12-14 12h-60c-5 0-9-5-8-10l22-143c1-5 182-120 182-120z"
+                  ></path>
+                  <path
+                    fill="#001f6b"
+                    d="M197 292l20-127a14 14 0 0 1 13-11h96c23 0 40 4 54 11-5 44-26 115-128 117h-44c-5 0-10 4-11 10z"
+                  ></path>
+                </g>
+              </svg>
+              <Pay>
+                Pay<Pal>Pal</Pal>
+              </Pay>
+            </PaypalButton>
 
-      {/* Main menu button */}
-      <EmptyCartContainer>
-        <NavToMainButton href={"/"}>Continue Shopping</NavToMainButton>
-      </EmptyCartContainer>
+            <GpayButton onClick={() => sendCartItems()} href={"/checkout"}>
+              <img src="google.svg" alt="" />
+              Pay
+            </GpayButton>
+          </>
+        )}
 
-      {/* Recommendations */}
-      <Recommendations />
-    </Center>
+        {/* Main menu button */}
+        <EmptyCartContainer>
+          <NavToMainButton href={"/"}>Continue Shopping</NavToMainButton>
+        </EmptyCartContainer>
+
+        {/* Recommendations */}
+        <Recommendations />
+      </Center>
+    </>
   );
 }

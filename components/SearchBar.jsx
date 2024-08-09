@@ -3,16 +3,16 @@ import { useEffect, useState, useCallback, useRef } from "react";
 import {useRouter} from "next/navigation";
 import debounce from 'lodash.debounce';
 import Link from "next/link";
-import { set } from "mongoose";
-import Overlay from "./Overlay";
+// import { set } from "mongoose";
+// import Overlay from "./Overlay";
 
 
 const SearchOverlay = styled.div`
   position: fixed;
   width: 100%;
-  height: 100%;
+  // height: 100%;
+  top: 4.8rem;
   z-index: 1000;
-  border:solid 1px #ccc;
 
   `;
 const InputContainer = styled.div`  
@@ -22,11 +22,16 @@ const InputContainer = styled.div`
   `;
 
 const StyledInput = styled.input`
-  width: 100%;
+  width: 85%;
   border:none;
-  border-radius:1rem 1rem 1rem 1rem;
+  border-radius:1rem;
   padding: 1em 0.5em;
-  margin: 1em 0 1em 1em;
+  margin: 1rem auto;
+
+  focus{
+    border:none;
+    outline:none;
+  }
  `;
 const StyledButton = styled.button`
   background-color: white;
@@ -35,20 +40,17 @@ const StyledButton = styled.button`
   `;
 
 const ProductImage = styled.img`
- width: 70px;
+ width: 90px;
+ margin-left: 0.7rem;
  `;
 
  const Product__Container = styled.div`
   display: flex;
-  align-items: center;
-  padding: 0.5rem;
-  // border-bottom: 1px solid #ccc;
+  align-items: center;  
   cursor: pointer;
   transition: background-color 0.3s;
-  gap: 1rem;
-  border: 1px solid #ccc;
+  gap: 3em;
   &:hover {
-
     background-color: #f9f9f9;
   }
   `;
@@ -56,30 +58,57 @@ const ProductImage = styled.img`
 const StyledLink = styled(Link)`
   text-decoration: none;
   color: black;
+  
   `;
+
+const ProductSpecs = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  `; 
 
 const ProductTitle = styled.div`
   font-size: 1rem;
 
 `;
 
-const ClearButton = styled.button`  
-
-  background-color:transparent;
-  border:none;
-  cursor: pointer;
-  padding: 0.5rem;
+const ProductPrice = styled.div`
+  display: flex;
+  font-weight: 600;
   svg{
-    width:1.5rem;
+    width:1.2rem;
+    margin-left: 0.5rem;
   }
   `;
 
 
 
+const ClearButton = styled.button`  
+  background-color:transparent;
+  border:none;
+  cursor: pointer;
+  padding-right: 1rem;
+  svg{
+    width:1.5rem;
+  }
+  `;
+
+const DB_products_heading = styled.div`
+ font-size: 1.5rem;
+ font-weight: 600;
+ margin-bottom: 1em;
+  `;
+
 const SearchResultContainer = styled.div`
-  // position: absolute;
-  width: 100%;
   background-color: white;
+  padding: 1em;
+  
+  `;
+
+const ResultsContainer = styled.div`  
+  display:flex;
+  flex-direction: column;
+  gap: 1rem;
   `;
 
 
@@ -88,7 +117,7 @@ export default function SearchBar({onClose}) {
   const [isInputFocused, setIsInputFocused] = useState(false);
   const [results, setResults] = useState([]);
   const [loading, setLoading] = useState(false);
-  // const router = useRouter();
+  const router = useRouter();
   const [clear, setClear] = useState(false);
   const inputRef = useRef(null);
   const searchOverlayRef = useRef(null);
@@ -128,14 +157,68 @@ export default function SearchBar({onClose}) {
   }, [search, fetchData]);
 
 
+  useEffect (() => {
+    if (inputRef.current){
+      inputRef.current.focus();
+    }
 
-  function ProductInfo({images, title, _id}){
+    // const handleClickOutside = (event) => {
+    //   if (searchOverlayRef.current && !searchOverlayRef.current.contains(event.target)) {
+    //     onClose();
+    //   }
+    // };
+
+    // document.addEventListener('mousedown', handleClickOutside);
+
+     // Listen for route changes to close the search bar
+    //  const handleRouteChange = () => {
+    //   onClose();
+    // };
+
+    // router.events.on("routeChangeStart", handleRouteChange);
+    // Cleanup the event listener on component unmount
+    // return () => {
+    //   document.removeEventListener('mousedown', handleClickOutside);
+    //   // router.events.off("routeChangeStart", handleRouteChange);
+    // };
+  },[]);
+
+
+  const handleClear = () => {
+    setSearch("");
+    setResults([]);
+    setClear(false);
+    if(inputRef.current){
+      inputRef.current.focus();
+    }
+  };
+  function ProductInfo({images, title, _id, price}){
     return (
       <div onClick={onClose}>
         <StyledLink href={"/product/"+ _id}>
           <Product__Container>
             <ProductImage src={images[0]} alt={title} />
-            <ProductTitle>{title}</ProductTitle>
+
+            <ProductSpecs>
+              <ProductTitle>{title}</ProductTitle>
+              <ProductPrice>From  
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  strokeWidth={1.5}
+                  stroke="currentColor"
+                  className="size-6"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M15 8.25H9m6 3H9m3 6-3-3h1.5a3 3 0 1 0 0-6M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
+                  />
+                </svg>
+                {price}
+              </ProductPrice>
+            </ProductSpecs>
 
           </Product__Container>
        
@@ -146,37 +229,25 @@ export default function SearchBar({onClose}) {
     );
   }
 
-  const handleClear = () => {
-    setSearch("");
-    setResults([]);
-    setClear(false);
-  };
+  function SearchResults(){
+    return (
+      <SearchResultContainer>
+          <DB_products_heading>Products</DB_products_heading>
 
-  useEffect (() => {
-    if (inputRef.current){
-      inputRef.current.focus();
-    }
+          <ResultsContainer>
+        
+            {results.map((product) => (
+              <ProductInfo key={product._id} {...product} />
+            ))}
+          </ResultsContainer>
+      
+      </SearchResultContainer>
 
-    const handleClickOutside = (event) => {
-      if (searchOverlayRef.current && !searchOverlayRef.current.contains(event.target)) {
-        onClose();
-      }
-    };
-
-    document.addEventListener('mousedown', handleClickOutside);
-
-    // Cleanup the event listener on component unmount
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-    };
-  },[]);
-
-
+    )
+  }
 
 
   return (
-    <>
-    {/* <Overlay onClick={onClose} /> */}
     <SearchOverlay ref = {searchOverlayRef}>
       <InputContainer>
               <StyledInput
@@ -200,21 +271,11 @@ export default function SearchBar({onClose}) {
              
            
       </InputContainer>
-
-      {isInputFocused && (
-        <SearchResultContainer>
-          
-          {loading? (<p>Loading...</p>):(
-            <div>
-              {results.map((product) => (
-                <ProductInfo key={product._id} {...product} />
-              ))}
-            </div>
-          ) 
-          }
-        </SearchResultContainer>
-      )}
+     
+      {results.length> 0 && <SearchResults />}
+      
     </SearchOverlay>
-    </>
+    
+    
   );
 } 

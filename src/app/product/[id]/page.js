@@ -152,6 +152,10 @@ const Strikethrough = styled.span`
   }
 `;
 
+const ProdPage = styled.div`
+  // padding-top: 4.5rem;
+`;
+
 // Product details
 function AboutProduct({ product }) {
   const [activeComponent, setActiveComponent] = useState("ProductOverview");
@@ -549,7 +553,7 @@ export default function ProductInfoPage({ params }) {
   // }, [cart]);
 
   return (
-    <div>
+    <ProdPage>
       <Center>
         <Container>
           <StyledTitle>{product?.title}</StyledTitle>
@@ -656,6 +660,6 @@ export default function ProductInfoPage({ params }) {
           <AboutProduct product={product} />
         </Container>
       </Center>
-    </div>
+    </ProdPage>
   );
 }

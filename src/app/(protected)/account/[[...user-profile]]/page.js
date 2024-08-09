@@ -4,6 +4,7 @@ import {
   SignedOut,
   RedirectToSignIn,
   SignedIn,
+  SignIn,
 } from "@clerk/nextjs";
 import { currentUser, auth } from "@clerk/nextjs/server";
 import CustomSignOutButton from "../../../../../components/CustomSignOutButton";
@@ -18,19 +19,29 @@ async function getUser() {
 }
 
 export default async function UserProfilePage() {
+  // const [user, setUser] = useState(null);
+
+  // useEffect(() => {
+  //   const fetchUser = async () => {
+  //     const user = await getUser();
+  //     setUser(user);
+  //   };
+  //   fetchUser();
+  // }, []);
+
   const user = await getUser();
-  console.log(user);
 
   return (
     <>
       <SignedIn>
-        <UserProfile path="/account" />
-        {/* <SignOutButton /> */}
+        {/* <UserProfile /> */}
         <CustomSignOutButton />
       </SignedIn>
       <SignedOut>
-        <RedirectToSignIn />
+        <SignIn />
+        <p>Sign in to view your profile page</p>
       </SignedOut>
+
       {user && (
         <div>
           <h1>User Profile</h1>
