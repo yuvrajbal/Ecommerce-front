@@ -10,7 +10,6 @@ import Link from "next/link";
 const SearchOverlay = styled.div`
   position: fixed;
   width: 100%;
-  // height: 100%;
   top: 4.8rem;
   z-index: 1000;
 

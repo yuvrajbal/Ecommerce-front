@@ -21,7 +21,8 @@
     "react-dom": "^18",
     "react-responsive": "^10.0.0",
     "stripe": "^16.2.0",
-    "styled-components": "^6.1.11"
+    "styled-components": "^6.1.11",
+    "svix": "^1.29.0"
   },
   "devDependencies": {
     "eslint": "^8",

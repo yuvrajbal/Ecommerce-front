@@ -1,3 +1,4 @@
+"use client";
 import styled from "styled-components";
 import { CartContext } from "./CartContext";
 import { useContext, useEffect,useState } from "react";

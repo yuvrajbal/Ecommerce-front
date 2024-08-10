@@ -5,47 +5,47 @@ import {
   RedirectToSignIn,
   SignedIn,
   SignIn,
+  SignUp,
+  SignUpButton,
 } from "@clerk/nextjs";
 import { currentUser, auth } from "@clerk/nextjs/server";
 import CustomSignOutButton from "../../../../../components/CustomSignOutButton";
+import Link from "next/link";
 
 async function getUser() {
-  const { userId } = auth();
-  if (!userId) {
+  // const { userId } = auth();
+  const user = await currentUser();
+  // console.log(user);
+  if (!user) {
     return null;
   }
 
-  return userId;
+  return user;
 }
 
 export default async function UserProfilePage() {
-  // const [user, setUser] = useState(null);
-
-  // useEffect(() => {
-  //   const fetchUser = async () => {
-  //     const user = await getUser();
-  //     setUser(user);
-  //   };
-  //   fetchUser();
-  // }, []);
-
   const user = await getUser();
-
+  console.log("user using currentuser", user);
+  const userId = user?.id;
+  console.log(userId);
   return (
     <>
       <SignedIn>
-        {/* <UserProfile /> */}
+        <UserProfile />
         <CustomSignOutButton />
       </SignedIn>
       <SignedOut>
-        <SignIn />
-        <p>Sign in to view your profile page</p>
+        <h1>Already a user ? Sign in </h1>
+        <Link href={"/signin"}>Sign in</Link>
+        <h1>New customer?</h1>
+        <Link href={"/signup"}>Sign up</Link>
+        {/* <SignUp /> */}
       </SignedOut>
 
-      {user && (
+      {userId && (
         <div>
           <h1>User Profile</h1>
-          <p>User ID: {user}</p>
+          <p>User ID: {user.emailAddresses[0].emailAddress}</p>
         </div>
       )}
     </>
